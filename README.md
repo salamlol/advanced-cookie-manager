@@ -483,7 +483,7 @@ This project is licensed under the **MIT License** — see [LICENSE](LICENSE) fi
 
 ---
 
-**Made with 🍪 and ❤️ by the Advanced Cookie Manager team**
+**Made with 🍪 and ❤️ by the Advanced Cookie Manager**
 
 *Manage your cookies like a pro. Enjoy! 🎉*
 
