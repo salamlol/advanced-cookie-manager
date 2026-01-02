@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Icon Generator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    .icon-container {
+      display: inline-block;
+      margin: 20px;
+    }
+    canvas {
+      border: 1px solid #ddd;
+      margin: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>🍪 Cookie Manager - Icon Generator</h1>
+  <p>Click the buttons below to download icons for the extension.</p>
+  
+  <div class="icon-container">
+    <canvas id="canvas16" width="16" height="16"></canvas>
+    <br>
+    <button onclick="downloadIcon(16)">Download 16x16</button>
+  </div>
+  
+  <div class="icon-container">
+    <canvas id="canvas48" width="48" height="48"></canvas>
+    <br>
+    <button onclick="downloadIcon(48)">Download 48x48</button>
+  </div>
+  
+  <div class="icon-container">
+    <canvas id="canvas128" width="128" height="128"></canvas>
+    <br>
+    <button onclick="downloadIcon(128)">Download 128x128</button>
+  </div>
+
+  <script>
+    // Draw cookie icon on canvas
+    function drawIcon(size) {
+      const canvas = document.getElementById(`canvas${size}`);
+      const ctx = canvas.getContext('2d');
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, size, size);
+      
+      // Background gradient
+      const gradient = ctx.createLinearGradient(0, 0, size, size);
+      gradient.addColorStop(0, '#F4A460');
+      gradient.addColorStop(1, '#D2691E');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, size, size);
+      
+      // Draw cookie circle
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size * 0.4, 0, Math.PI * 2);
+      ctx.fillStyle = '#DEB887';
+      ctx.fill();
+      
+      // Draw chocolate chips
+      const chipSize = size * 0.08;
+      const chips = [
+        [0.35, 0.35],
+        [0.65, 0.35],
+        [0.5, 0.5],
+        [0.35, 0.65],
+        [0.65, 0.65]
+      ];
+      
+      ctx.fillStyle = '#8B4513';
+      chips.forEach(([x, y]) => {
+        ctx.beginPath();
+        ctx.arc(size * x, size * y, chipSize, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      
+      // Add border
+      ctx.strokeStyle = '#8B4513';
+      ctx.lineWidth = size * 0.02;
+      ctx.beginPath();
+      ctx.arc(size/2, size/2, size * 0.4, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    
+    // Download canvas as PNG
+    function downloadIcon(size) {
+      const canvas = document.getElementById(`canvas${size}`);
+      const link = document.createElement('a');
+      link.download = `icon${size}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+    
+    // Draw all icons on load
+    window.onload = () => {
+      drawIcon(16);
+      drawIcon(48);
+      drawIcon(128);
+    };
+  </script>
+</body>
+</html>

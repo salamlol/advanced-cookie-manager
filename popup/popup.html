@@ -1,0 +1,291 @@
+<!--
+  Advanced Cookie Manager - Popup UI
+  Version: 1.1.0
+  
+  Description:
+  Main popup interface for the Advanced Cookie Manager extension.
+  Provides glassmorphism UI for viewing, adding, editing, and managing cookies.
+  
+  Features:
+  - Displays all cookies for current domain or all domains
+  - Add/Edit/Delete cookie operations via modals
+  - Multi-format import/export (JSON, Header String, Netscape)
+  - Password protection with lock screen
+  - Theme toggle (dark/light)
+  - Search, filter, and sort functionality
+  - Toast notifications for user feedback
+  
+  Structure:
+  - Lock Screen: Password authentication overlay (hidden by default)
+  - Main App: Header, toolbar, cookie list, modals
+  - Modals: Cookie CRUD, Import, Export, Settings
+  - Scripts: Loaded at bottom (storage, parsers, crypto utilities, popup.js)
+  
+  Dependencies:
+  - popup.css (styling and glassmorphism effects)
+  - popup.js (all event handlers and logic)
+  - utils/storage.js (Chrome storage wrapper)
+  - utils/cookieParser.js (JSON/Header string parsing)
+  - utils/netscapeParser.js (Netscape format support)
+  - utils/crypto.js (AES-256-GCM encryption/decryption)
+  
+  Last Updated: 2026
+  Manifest: V3
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Advanced Cookie Manager</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <!-- Password Protection Screen -->
+  <!-- v1.1.0: Lock overlay with password input for extension security -->
+  <div id="lockScreen" class="lock-screen hidden">
+    <div class="lock-container glass-panel">
+      <div class="lock-icon">🔒</div>
+      <h2>Advanced Cookie Manager Locked</h2>
+      <input type="password" id="unlockPassword" placeholder="Enter password" class="glass-input">
+      <button id="unlockBtn" class="glass-btn primary">Unlock</button>
+      <div id="lockError" class="error-message hidden"></div>
+    </div>
+  </div>
+
+  <!-- Main Application -->
+  <!-- v1.1.0: Primary UI container with header, toolbar, and cookie list -->
+  <div id="mainApp" class="app-container">
+    <!-- Header: Title, domain info, theme toggle, settings -->
+    <header class="header glass-panel">
+      <div class="header-left">
+        <h1>🍪 Advanced Cookie Manager</h1>
+        <span id="domainInfo" class="domain-info"></span>
+      </div>
+      <div class="header-right">
+        <button id="themeToggle" class="icon-btn" title="Toggle Theme">🌙</button>
+        <button id="settingsBtn" class="icon-btn" title="Settings">⚙️</button>
+      </div>
+    </header>
+
+    <!-- Search, Filter, and Sort Controls -->
+    <!-- v1.1.0: Live search, domain toggle, and sort options -->
+    <div class="toolbar glass-panel">
+      <input type="text" id="searchInput" placeholder="Search cookies..." class="glass-input search-input">
+      <label class="toggle-label">
+        <input type="checkbox" id="showAllDomains">
+        <span>All Domains</span>
+      </label>
+      <select id="sortBy" class="glass-select">
+        <option value="name">Sort by Name</option>
+        <option value="domain">Sort by Domain</option>
+        <option value="expiration">Sort by Expiration</option>
+      </select>
+    </div>
+
+    <!-- Primary Action Buttons -->
+    <!-- v1.1.0: Add, Import, Export, and Clear All operations -->
+    <div class="actions glass-panel">
+      <button id="addCookieBtn" class="glass-btn primary">➕ Add Cookie</button>
+      <button id="importBtn" class="glass-btn">📥 Import</button>
+      <button id="exportBtn" class="glass-btn">📤 Export</button>
+      <button id="clearBtn" class="glass-btn danger">🗑️ Clear All</button>
+    </div>
+
+    <!-- Cookie List Container -->
+    <!-- v1.1.0: Dynamically populated with cookie items, loading state, empty state -->
+    <div id="cookieList" class="cookie-list">
+      <div class="loading hidden" id="loading">Loading cookies...</div>
+      <div class="empty-state hidden" id="emptyState">
+        <div class="empty-icon">🍪</div>
+        <p>No cookies found</p>
+      </div>
+    </div>
+
+    <!-- Footer: Cookie count display -->
+    <div class="footer glass-panel">
+      <span id="cookieCount">0 cookies</span>
+    </div>
+  </div>
+
+  <!-- Modal: Add/Edit Cookie -->
+  <!-- v1.1.0: Form for creating or modifying cookie properties -->
+  <div id="cookieModal" class="modal hidden">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3 id="modalTitle">Add Cookie</h3>
+        <button class="modal-close" id="closeModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Required fields: Name and Value -->
+        <div class="form-group">
+          <label>Name *</label>
+          <input type="text" id="cookieName" class="glass-input" placeholder="Cookie name">
+        </div>
+        <div class="form-group">
+          <label>Value *</label>
+          <input type="text" id="cookieValue" class="glass-input" placeholder="Cookie value">
+        </div>
+        <!-- Optional fields: Domain, Path, Expiration -->
+        <div class="form-group">
+          <label>Domain</label>
+          <input type="text" id="cookieDomain" class="glass-input" placeholder=".example.com">
+        </div>
+        <div class="form-group">
+          <label>Path</label>
+          <input type="text" id="cookiePath" class="glass-input" value="/" placeholder="/">
+        </div>
+        <div class="form-group">
+          <label>Expiration Date</label>
+          <input type="datetime-local" id="cookieExpires" class="glass-input">
+        </div>
+        <!-- Cookie flags: Secure, HttpOnly, SameSite -->
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="cookieSecure">
+            <span>Secure (HTTPS only)</span>
+          </label>
+        </div>
+        <div class="form-group checkbox-group">
+          <label>
+            <input type="checkbox" id="cookieHttpOnly">
+            <span>HttpOnly</span>
+          </label>
+        </div>
+        <div class="form-group">
+          <label>SameSite</label>
+          <select id="cookieSameSite" class="glass-select">
+            <option value="no_restriction">No Restriction</option>
+            <option value="lax">Lax</option>
+            <option value="strict">Strict</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelModal" class="glass-btn">Cancel</button>
+        <button id="saveCookie" class="glass-btn primary">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Import Cookies -->
+  <!-- v1.1.0: Multi-format import with optional encryption/decryption -->
+  <div id="importModal" class="modal hidden">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3>Import Cookies</h3>
+        <button class="modal-close" id="closeImportModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Format selection: JSON, Header String, Netscape -->
+        <div class="form-group">
+          <label>Format</label>
+          <select id="importFormat" class="glass-select">
+            <option value="json">JSON</option>
+            <option value="header">Header String (key=value)</option>
+            <option value="netscape">Netscape Cookie File</option>
+          </select>
+        </div>
+        <!-- Data input textarea -->
+        <div class="form-group">
+          <label>Paste Cookies Data</label>
+          <textarea id="importData" class="glass-textarea" rows="10" placeholder="Paste your cookie data here..."></textarea>
+        </div>
+        <!-- Optional decryption password for encrypted imports -->
+        <div class="form-group">
+          <label>🔐 Decryption Password (Optional)</label>
+          <input type="password" id="importPassword" class="glass-input" placeholder="Leave blank if not encrypted">
+          <small>If the data is encrypted, enter the password to decrypt it.</small>
+        </div>
+        <div id="importError" class="error-message hidden"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelImport" class="glass-btn">Cancel</button>
+        <button id="importConfirm" class="glass-btn primary">Import</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Export Cookies -->
+  <!-- v1.1.0: Multi-format export with optional AES-256-GCM encryption -->
+  <div id="exportModal" class="modal hidden">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3>Export Cookies</h3>
+        <button class="modal-close" id="closeExportModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Format selection: JSON, Header String, Netscape -->
+        <div class="form-group">
+          <label>Format</label>
+          <select id="exportFormat" class="glass-select">
+            <option value="json">JSON</option>
+            <option value="header">Header String (key=value)</option>
+            <option value="netscape">Netscape Cookie File</option>
+          </select>
+        </div>
+        <!-- Read-only export data display with encryption badge -->
+        <div class="form-group">
+          <label>
+            Exported Data
+            <span id="encryptedBadge" class="encrypted-badge hidden">🔒 Encrypted</span>
+          </label>
+          <textarea id="exportData" class="glass-textarea" rows="10" readonly></textarea>
+        </div>
+        <!-- Optional encryption password for secure exports -->
+        <div class="form-group">
+          <label>🔐 Encryption Password (Optional)</label>
+          <input type="password" id="exportPassword" class="glass-input" placeholder="Leave blank for no encryption">
+          <small>Encrypt exported data with a password for security.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="copyExport" class="glass-btn primary">📋 Copy</button>
+        <button id="downloadExport" class="glass-btn primary">💾 Download</button>
+        <button id="closeExportBtn" class="glass-btn">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Settings -->
+  <!-- v1.1.0: Password protection and auto-lock configuration -->
+  <div id="settingsModal" class="modal hidden">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3>Settings</h3>
+        <button class="modal-close" id="closeSettingsModal">✕</button>
+      </div>
+      <div class="modal-body">
+        <!-- Password protection setup -->
+        <div class="form-group">
+          <label>Password Protection</label>
+          <input type="password" id="settingsPassword" class="glass-input" placeholder="Leave blank to disable">
+          <small>Set a password to lock the extension. Leave blank to disable (Reload to take action).</small>
+        </div>
+        <!-- Auto-lock timeout configuration -->
+        <div class="form-group">
+          <label>Auto-Lock Time (seconds)</label>
+          <input type="number" id="autoLockTime" class="glass-input" value="300" min="0">
+          <small>Time in seconds before auto-lock. Set 0 to disable.</small>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="cancelSettings" class="glass-btn">Cancel</button>
+        <button id="saveSettings" class="glass-btn primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <!-- v1.1.0: Auto-dismiss feedback messages for user actions -->
+  <div id="toast" class="toast glass-panel hidden"></div>
+
+  <!-- Scripts -->
+  <!-- v1.1.0: Load utilities first, then popup.js for event handling -->
+  <script src="../utils/storage.js"></script>
+  <script src="../utils/cookieParser.js"></script>
+  <script src="../utils/netscapeParser.js"></script>
+  <script src="../utils/crypto.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
