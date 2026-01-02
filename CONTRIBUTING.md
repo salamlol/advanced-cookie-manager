@@ -184,4 +184,4 @@ Maintain a professional and welcoming environment for everyone.
 Your contribution helps developers and power users manage cookies **securely and efficiently**.
 
 Happy hacking 🍪🚀
-— *Advanced Cookie Manager Team*
+— *Advanced Cookie Manager*
