@@ -461,6 +461,42 @@ html {
   gap: 8px;
 }
 
+/* Credits modal */
+.credit-body {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.credit-pill {
+  padding: 12px 14px;
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  background: var(--glass-bg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.credit-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+
+.credit-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.credit-actions .glass-btn {
+  flex: 1 1 160px;
+  text-align: center;
+  text-decoration: none;
+}
+
 /* Form Groups */
 .form-group {
   margin-bottom: 16px;

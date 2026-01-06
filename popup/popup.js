@@ -108,6 +108,11 @@ function setupEventListeners() {
   // Theme toggle
   document.getElementById('themeToggle').addEventListener('click', toggleTheme);
   
+  // Credits
+  document.getElementById('creditBtn').addEventListener('click', openCreditModal);
+  document.getElementById('closeCreditModal').addEventListener('click', () => closeModal('creditModal'));
+  document.getElementById('creditCloseBtn').addEventListener('click', () => closeModal('creditModal'));
+
   // Settings
   document.getElementById('settingsBtn').addEventListener('click', openSettings);
   document.getElementById('closeSettingsModal').addEventListener('click', () => closeModal('settingsModal'));
@@ -946,6 +951,13 @@ async function saveSettings() {
  */
 function closeModal(modalId) {
   document.getElementById(modalId).classList.add('hidden');
+}
+
+/**
+ * Open credits modal
+ */
+function openCreditModal() {
+  document.getElementById('creditModal').classList.remove('hidden');
 }
 
 /**

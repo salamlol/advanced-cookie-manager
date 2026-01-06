@@ -64,6 +64,7 @@
       </div>
       <div class="header-right">
         <button id="themeToggle" class="icon-btn" title="Toggle Theme">🌙</button>
+        <button id="creditBtn" class="icon-btn" title="Credits">ℹ️</button>
         <button id="settingsBtn" class="icon-btn" title="Settings">⚙️</button>
       </div>
     </header>
@@ -272,6 +273,32 @@
       <div class="modal-footer">
         <button id="cancelSettings" class="glass-btn">Cancel</button>
         <button id="saveSettings" class="glass-btn primary">Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Credits -->
+  <div id="creditModal" class="modal hidden">
+    <div class="modal-content glass-panel">
+      <div class="modal-header">
+        <h3>Credits</h3>
+        <button class="modal-close" id="closeCreditModal">✕</button>
+      </div>
+      <div class="modal-body">
+          <div class="credit-body">
+            <div class="credit-pill">Built by <strong>duyhandsome</strong> with ❤️ as a Advanced Cookie Manager extension.</div>
+            <div class="credit-list">
+              <span>✨ Check out the source on GitHub</span>
+              <span>☕ If this helps, consider a small donation</span>
+            </div>
+            <div class="credit-actions">
+              <a class="glass-btn primary" href="https://github.com/dominhduy09/advanced-cookie-manager" target="_blank" rel="noopener noreferrer">View Source on GitHub</a>
+              <a class="glass-btn" href="https://paypal.me/dominhduy09" target="_blank" rel="noopener noreferrer">Donate via PayPal</a>
+            </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button id="creditCloseBtn" class="glass-btn primary">Close</button>
       </div>
     </div>
   </div>
