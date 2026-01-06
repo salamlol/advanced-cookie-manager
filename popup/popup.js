@@ -139,6 +139,7 @@ function setupEventListeners() {
   document.getElementById('closeImportModal').addEventListener('click', () => closeModal('importModal'));
   document.getElementById('cancelImport').addEventListener('click', () => closeModal('importModal'));
   document.getElementById('importConfirm').addEventListener('click', importCookies);
+  document.getElementById('importFile').addEventListener('change', handleImportFile);
   
   // Export modal
   document.getElementById('closeExportModal').addEventListener('click', () => closeModal('exportModal'));
@@ -698,6 +699,42 @@ function openImportModal() {
   document.getElementById('importData').value = '';
   document.getElementById('importPassword').value = '';
   document.getElementById('importError').classList.add('hidden');
+  document.getElementById('importFile').value = '';
+  document.getElementById('importFileName').textContent = 'No file selected';
+}
+
+/**
+ * Handle import file selection and load its text into the textarea
+ */
+async function handleImportFile(event) {
+  const fileInput = event.target;
+  const file = fileInput.files && fileInput.files[0];
+  const fileNameEl = document.getElementById('importFileName');
+
+  if (!file) {
+    fileNameEl.textContent = 'No file selected';
+    return;
+  }
+
+  fileNameEl.textContent = file.name;
+
+  try {
+    const text = await file.text();
+    document.getElementById('importData').value = text;
+
+    // Auto-select format by file extension when possible
+    const lower = file.name.toLowerCase();
+    const formatSelect = document.getElementById('importFormat');
+    if (lower.endsWith('.json')) {
+      formatSelect.value = 'json';
+    } else if (lower.endsWith('.txt')) {
+      // Keep current selection; Netscape/header often use .txt
+    }
+
+    showToast('File loaded. Review data then click Import.', 'success');
+  } catch (err) {
+    showToast('Failed to read file: ' + err.message, 'error');
+  }
 }
 
 /**

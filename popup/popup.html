@@ -192,6 +192,16 @@
           <label>Paste Cookies Data</label>
           <textarea id="importData" class="glass-textarea" rows="10" placeholder="Paste your cookie data here..."></textarea>
         </div>
+        <!-- File import option -->
+        <div class="form-group">
+          <label>Or Select a File</label>
+          <div class="file-row">
+            <input type="file" id="importFile" accept=".json,.txt" class="hidden-file">
+            <label for="importFile" class="glass-btn">📂 Choose File</label>
+            <span id="importFileName" class="file-name">No file selected</span>
+          </div>
+          <small>Supported: JSON, header, or Netscape cookie files (.json, .txt).</small>
+        </div>
         <!-- Optional decryption password for encrypted imports -->
         <div class="form-group">
           <label>🔐 Decryption Password (Optional)</label>
